@@ -64,6 +64,14 @@ const App = () => {
                 dispatch(updateProfile({ phone: e.target.value }))
               }
             />
+            <input
+              name="address"
+              placeholder="Address"
+              value={profile.address}
+              onChange={(e) =>
+                dispatch(updateProfile({ address: e.target.value }))
+              }
+            />
           </div>
         );
 
@@ -71,21 +79,24 @@ const App = () => {
         return (
           <div>
             <h2>Add your Education Details</h2>
-            <button
-              id="add_education"
-              onClick={() =>
-                dispatch(
-                  addEducation({
-                    courseName: "Course",
-                    completionYear: "2025",
-                    college: "My College",
-                    percentage: "80%",
-                  })
-                )
-              }
-            >
-              Add Education
-            </button>
+            <input
+              name="courseName"
+              placeholder="Course Name"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  dispatch(
+                    addEducation({
+                      courseName: e.target.value,
+                      completionYear: "2025",
+                      college: "My College",
+                      percentage: "80%",
+                    })
+                  );
+                  e.target.value = "";
+                }
+              }}
+            />
             <ul>
               {education.map((edu, i) => (
                 <li key={i}>
@@ -103,18 +114,12 @@ const App = () => {
         return (
           <div>
             <h2>Add your Skills</h2>
-            <input
-              type="text"
-              name="skill"
-              placeholder="Enter a skill"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  dispatch(addSkill(e.target.value));
-                  e.target.value = "";
-                }
-              }}
-            />
+            <button
+              id="add_skill"
+              onClick={() => dispatch(addSkill("JavaScript"))}
+            >
+              Add Skill
+            </button>
             <ul>
               {skills.map((skill, i) => (
                 <li key={i}>
@@ -132,20 +137,23 @@ const App = () => {
         return (
           <div>
             <h2>Add your Mini Projects</h2>
-            <button
-              id="add_project"
-              onClick={() =>
-                dispatch(
-                  addProject({
-                    projectName: "Sample Project",
-                    techStack: "React, Redux",
-                    description: "Demo project",
-                  })
-                )
-              }
-            >
-              Add Project
-            </button>
+            <input
+              name="projectName"
+              placeholder="Project Name"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  dispatch(
+                    addProject({
+                      projectName: e.target.value,
+                      techStack: "React, Redux",
+                      description: "Demo project",
+                    })
+                  );
+                  e.target.value = "";
+                }
+              }}
+            />
             <ul>
               {projects.map((proj, i) => (
                 <li key={i}>
@@ -163,18 +171,12 @@ const App = () => {
         return (
           <div>
             <h2>Add your Social Media Links</h2>
-            <input
-              type="text"
-              name="Social"
-              placeholder="Enter social media link"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  dispatch(addSocial(e.target.value));
-                  e.target.value = "";
-                }
-              }}
-            />
+            <button
+              id="add_social"
+              onClick={() => dispatch(addSocial("https://github.com/user"))}
+            >
+              Add Social
+            </button>
             <ul>
               {social.map((s, i) => (
                 <li key={i}>
