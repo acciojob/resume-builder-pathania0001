@@ -16,31 +16,30 @@ const App = () => {
   const [page, setPage] = useState(0);
   const dispatch = useDispatch();
 
-  // Access state
+  // Redux state
   const profile = useSelector((state) => state.profile);
   const education = useSelector((state) => state.education);
   const skills = useSelector((state) => state.skills);
   const projects = useSelector((state) => state.projects);
   const social = useSelector((state) => state.social);
 
-  // Navigation handlers
+  // navigation
   const nextPage = () => setPage((p) => Math.min(p + 1, 5));
   const prevPage = () => setPage((p) => Math.max(p - 1, 0));
 
-  // Save handler (here just log, but you could call API)
   const saveResume = () => {
     const resumeData = { profile, education, skills, projects, social };
     console.log("Final Resume:", resumeData);
     alert("Resume saved! Check console.");
   };
 
-  // ----- PAGE FORMS -----
   const renderPage = () => {
     switch (page) {
       case 0: // Profile
         return (
           <div>
-            <h2>Profile</h2>
+            <h1>RESUME GENERATOR</h1>
+            <h2>Add your profile details</h2>
             <input
               name="fname"
               placeholder="First Name"
@@ -65,27 +64,13 @@ const App = () => {
                 dispatch(updateProfile({ phone: e.target.value }))
               }
             />
-            <input
-              name="address"
-              placeholder="Address"
-              value={profile.address}
-              onChange={(e) =>
-                dispatch(updateProfile({ address: e.target.value }))
-              }
-            />
-            <input
-              name="url"
-              placeholder="Portfolio URL"
-              value={profile.url}
-              onChange={(e) => dispatch(updateProfile({ url: e.target.value }))}
-            />
           </div>
         );
 
       case 1: // Education
         return (
           <div>
-            <h2>Education</h2>
+            <h2>Add your Education Details</h2>
             <button
               id="add_education"
               onClick={() =>
@@ -104,11 +89,8 @@ const App = () => {
             <ul>
               {education.map((edu, i) => (
                 <li key={i}>
-                  {edu.courseName} - {edu.college} ({edu.completionYear}){" "}
-                  <button
-                    id="delete"
-                    onClick={() => dispatch(deleteEducation(i))}
-                  >
+                  {edu.courseName} - {edu.college} ({edu.completionYear})
+                  <button id="delete" onClick={() => dispatch(deleteEducation(i))}>
                     Delete
                   </button>
                 </li>
@@ -120,21 +102,24 @@ const App = () => {
       case 2: // Skills
         return (
           <div>
-            <h2>Skills</h2>
-            <button
-              id="add_skill"
-              onClick={() => dispatch(addSkill("JavaScript"))}
-            >
-              Add Skill
-            </button>
+            <h2>Add your Skills</h2>
+            <input
+              type="text"
+              name="skill"
+              placeholder="Enter a skill"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  dispatch(addSkill(e.target.value));
+                  e.target.value = "";
+                }
+              }}
+            />
             <ul>
               {skills.map((skill, i) => (
                 <li key={i}>
-                  {skill}{" "}
-                  <button
-                    id="delete_skill"
-                    onClick={() => dispatch(deleteSkill(i))}
-                  >
+                  {skill}
+                  <button id="delete_skill" onClick={() => dispatch(deleteSkill(i))}>
                     Delete
                   </button>
                 </li>
@@ -146,7 +131,7 @@ const App = () => {
       case 3: // Projects
         return (
           <div>
-            <h2>Projects</h2>
+            <h2>Add your Mini Projects</h2>
             <button
               id="add_project"
               onClick={() =>
@@ -164,11 +149,8 @@ const App = () => {
             <ul>
               {projects.map((proj, i) => (
                 <li key={i}>
-                  {proj.projectName} ({proj.techStack}){" "}
-                  <button
-                    id="delete"
-                    onClick={() => dispatch(deleteProject(i))}
-                  >
+                  {proj.projectName} ({proj.techStack})
+                  <button id="delete" onClick={() => dispatch(deleteProject(i))}>
                     Delete
                   </button>
                 </li>
@@ -177,20 +159,26 @@ const App = () => {
           </div>
         );
 
-      case 4: // Social Media
+      case 4: // Social
         return (
           <div>
-            <h2>Social Media</h2>
-            <button
-              id="add_social"
-              onClick={() => dispatch(addSocial("https://github.com/user"))}
-            >
-              Add Social
-            </button>
+            <h2>Add your Social Media Links</h2>
+            <input
+              type="text"
+              name="Social"
+              placeholder="Enter social media link"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  dispatch(addSocial(e.target.value));
+                  e.target.value = "";
+                }
+              }}
+            />
             <ul>
               {social.map((s, i) => (
                 <li key={i}>
-                  {s}{" "}
+                  {s}
                   <button id="delete" onClick={() => dispatch(deleteSocial(i))}>
                     Delete
                   </button>
@@ -200,7 +188,7 @@ const App = () => {
           </div>
         );
 
-      case 5: // Final Resume
+      case 5: // Final
         return (
           <div>
             <h2>Final Resume Output</h2>
@@ -216,7 +204,6 @@ const App = () => {
   return (
     <div>
       {renderPage()}
-
       <div style={{ marginTop: "20px" }}>
         {page > 0 && (
           <button id="back" onClick={prevPage}>
